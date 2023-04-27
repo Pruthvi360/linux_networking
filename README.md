@@ -118,3 +118,8 @@ sudo systemctl --now disable  cockpit.socket
 sudo apt install nmap
 sudo namp 10.0.0.3 -P            > Scanning the Open ports on this IP
 ```
+
+## READING SPECIFIC LOGS FOR THE SERVICE
+```
+journal -u NetworkManager | tail -10 | less
+```
