@@ -113,3 +113,8 @@ Can be configured with a variety of tools:
 sudo systemctl status cockpit.socket         (**This Opens Port 9090 to access GUI from the Browser not recommended**)
 sudo systemctl --now disable  cockpit.socket
 ```
+## NETWORK PORT SCANNING
+```
+sudo apt install nmap
+sudo namp 10.0.0.3 -P            > Scanning the Open ports on this IP
+```
