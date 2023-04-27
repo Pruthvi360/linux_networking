@@ -15,6 +15,7 @@ ip a s | sed -ne 's,^ *inet6* \([^ /]*\)/.*$,\1,p' | sort -u
 ip a s | awk -ne 's, ^ *inet6* \([^ /]*\)/.*$,\,p' | sort -u
 ip -o -4 a
 ip -o -4 a | awk '{print $4}'
+ip a | grep inet | sort -n
 
 cd /sys/class/net/                             > **To check network interface**
 ```
@@ -39,15 +40,18 @@ hostnamtctl set-location building3
 ```
 # NETWORK MANAGER CLI
 ```
-nmcli                                         > to check the DNS SERVER
+nmcli                                         > Displays the network configuration
 cat /etc/resolv.conf                          > To check the DNS server, Domain 
 cat /etc/systemd/resolved.conf                > Ohter way in the different Linux distors
 cat /etc/hosts                                > To check DNS mapped to and changing nano instead of cat
 10.0.0.3   webserver.example.com  webserver   > Format to mention DNS mapping to the IP
-nmcli con show 
-nmcli con show <network-interface>
-nmcli con down <network-interface>
-cmcli con edit <network-interface>
-
-
-
+nmcli con show                                > Displays the available NetworkManager connections
+nmcli con mod <network-interface>            > Modifies the connection without the shell
+nmcli con down <network-interface>            > Brings the network interface down
+nmcli con up <network-interface>              > Brings the network interface up
+nmcli con edit <network-interface>            > Opens the nmcli shell  
+nmcli c m "Wired connection 1" ipv4.method manual ipv4.address 10.0.0.12/24 ipv4.gateway 10.0.0.1 ipv4.dns 8.8.8.8
+nmcli connection down "Wired connection 1"
+nmcli connection down "Wired connection 1"
+nmcli con show
+```
