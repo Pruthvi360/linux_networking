@@ -123,3 +123,11 @@ sudo namp 10.0.0.3 -P            > Scanning the Open ports on this IP
 ```
 journal -u NetworkManager | tail -10 | less
 ```
+
+## ROUTE MANIPULATION
+```
+ip -br a                            > check for the interfaces
+ip r                                > Gives the interfaces routes and interfaces associated to the IP and Metric lower metric is High preffered
+nmcli device show                   > Gives details info of the every connection
+nmcli connection mod <connection-name> ipv4.route-metric 80
+```
