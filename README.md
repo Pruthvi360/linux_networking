@@ -16,8 +16,22 @@ ip a s | awk -ne 's, ^ *inet6* \([^ /]*\)/.*$,\,p' | sort -u
 ip -o -4 a
 ip -o -4 a | awk '{print $4}'
 ip a | grep inet | sort -n
-
 cd /sys/class/net/                             > **To check network interface**
+
+nano /etc/network/interfaces
+----change form static to dhcp---
+ifdown <interface name>
+ifup <interface name>
+
+nano /etc/network/interfaces
+----change form dhcp to static---
+iface ens3 inet static
+        address 10.0.0.12/24
+        gateway 10.0.0.1
+ifdown <interface name>
+ifup <interface name>
+dhclient
+ifquery <interface-name>
 ```
 ## IP ROUTE COMMANDS
 ```
@@ -51,7 +65,51 @@ nmcli con down <network-interface>            > Brings the network interface dow
 nmcli con up <network-interface>              > Brings the network interface up
 nmcli con edit <network-interface>            > Opens the nmcli shell  
 nmcli c m "Wired connection 1" ipv4.method manual ipv4.address 10.0.0.12/24 ipv4.gateway 10.0.0.1 ipv4.dns 8.8.8.8
+nmcli c m "Wired connection 1" ipv4.method manual ipv4.address 10.0.0.12/24,10.0.0.13/24 ipv4.gateway 10.0.0.1 ipv4.dns 8.8.8.8
 nmcli connection down "Wired connection 1"
-nmcli connection down "Wired connection 1"
+nmcli connection up "Wired connection 1"
 nmcli con show
+nmcli con mod "Wired connection 1" ipv4.dns-search "example.local"
+nmcli conneciton mod "Wired connection 1" ipv4.method auto
+nmcli connection down "Wired connection 1"
+nmcli connection up "Wired connection 1"
+nmcli con show
+nmcli c m "Wired connection 1" -ipv4.address 10.0.0.12/24        > To delete the IP
+nmcli c m "Wired connection 1" 
+nmcli > remove ipv4.address 10.0.0.12/24
+nmcli > set ipv4.address 10.0.0.13/24
+nmcli > save
+nmcli > activate
+nmcli > quit
+```
+## NETWORKING SERVICES
+```
+sudo systemctl status networking.service
+service networking status
+/etc/init.d/networking status
+cat /etc/network/interfaces
+```
+
+## Ubuntu Specific Arch linux distros
+```
+sudo systemctl status systemd-networkd
+netplan try
+networkctl
+networkctl status
+journalctl -u systemd-networkd
+networkctl down <interface-name>
+networkctl up <interface-name>
+resolvectl status
+ubuntu: /etc/netplan
+other distros : /etc/systemd/network
+```
+
+## Network manager Most widely used in the industry maily in fedora Redhat Centos Desktop Environment
+```
+systemctl status NetworkManager
+Can be configured with a variety of tools:
+1. Settings 2. nm-connection-editor 3. nmtui 4. nmcli 4. cockpit and configuration files (not recommended).
+
+sudo systemctl status cockpit.socket         (**This Opens Port 9090 to access GUI from the Browser not recommended**)
+sudo systemctl --now disable  cockpit.socket
 ```
